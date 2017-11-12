@@ -18,15 +18,28 @@
   "bugs": {
     "url": "https://github.com/juanpagfe/sn-bulk-curator/issues"
   },
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.2.0"
+  },
   "dependencies": {
     "angular": "^1.6.6",
     "angular-route": "^1.6.6",
+    "angular-sanitize": "^1.6.6",
     "angular-ui-bootstrap": "^2.5.6",
+    "angular-ui-router": "^0.4.3",
     "big-integer": "^1.6.22",
     "bootstrap": "^3.3.7",
+    "bootstrap-datepicker": "^1.7.1",
     "dotenv": "^4.0.0",
     "express": "^4.15.2",
+    "gulp-csso": "^3.0.0",
+    "jquery": "^3.2.1",
     "method-override": "^2.3.10",
+    "oclazyload": "^1.1.0",
     "twit": "^2.2.5"
   }
 }

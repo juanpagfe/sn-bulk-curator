@@ -1,0 +1,42 @@
+<link rel="stylesheet" type="text/css" href="node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Delete tweets</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-3">
+                <input type="text" ng-model="search" class="form-control" name="" placeholder="Filter by text (Excludes date)">
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group input-daterange">
+                    <input type="text" class="form-control datepicker" ng-model="dateFrom">
+                    <div class="input-group-addon">to</div>
+                    <input type="text" class="form-control datepicker" ng-model="dateTo">
+                </div>
+            </div>
+            <div class="col-lg-2 col-lg-offset-4">
+                <button type="button" ng-click="deleteTweets()" class="btn btn-danger">Delete Selected</button>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div ng-repeat="tweet in tweets | filter:search | filter:{ created_at: dateFrom }:gtDate | filter:{ created_at: dateTo }:ltDate" ng-class="(tweet.delete) ? 'tweet-delete' : ''" class="col-lg-4 tweet">
+                <div ng-bind-html="parseTweet(tweet.text)" ng-click="gotoTweet($event, tweet.user.screen_name, tweet.id_str)" class="tweet-td col-lg-10"></div>
+                <div class="del-div col-lg-1"><input type="checkbox" ng-model="tweet.delete"></div>
+                <div class="col-lg-12 tweet-date">
+                    <span class="pull-right">{{parseDate(tweet.created_at) | date : 'dd MMM yyyy'}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'mm/dd/yyyy'
+        });
+    })
+</script>
