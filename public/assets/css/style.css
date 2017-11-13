@@ -3,14 +3,14 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 }
-.tweet .del-div{
+.elem .del-div{
     position: relative;
     min-height: 30px;
     margin: 0;
     padding: 0;
 }
 
-.tweet .del-div input{
+.elem .del-div input{
     position: absolute;
     width: 100%;
     height: 30px;
@@ -20,7 +20,7 @@ body {
     padding: 0;
 }
 
-.tweet{
+.elem{
     width: 31.333333%;
     min-height: 180px;
     max-height: 180px;
@@ -29,21 +29,33 @@ body {
     padding: 10px;
 }
 
-.tweet-date{
+.elem-date{
     bottom: 0;
     position: absolute;
     padding-bottom: 5px;
     padding-right: 15px;
 }
 
-.tweet-td{
+.elem-td{
     word-wrap: break-word;
     height: auto;
     cursor: pointer;
     font-size: 1.2em;
 }
 
-.tweet-delete{
+.elem-delete{
     background-color: #d9534f !important;
     color: white;
+}
+
+.nav li{
+    display: inline-block;
+    font-size: 18px;
+    line-height: 20px;
+    padding: 5px;
+}
+
+.nav>li:focus, .nav>li:hover, .nav>li.active{
+    text-decoration: none;
+    background-color: #eee;
 }

@@ -2,30 +2,25 @@
 
 angular.module('snBulkCurator')
 .controller(
-    'TwitterCtrl', [
+    'FacebookCtrl', [
     '$scope',
     '$http', 
     '$window',
     function($scope, $http, $window)
     {
-        const TWITTER_URL = 'https://twitter.com'
+        const FACEBOOK_URL = 'https://twitter.com'
         var max_id = false
 
         $scope.dateFormat = 'YYYY.MM.dd'
-        $scope.tweets = []
+        $scope.posts = []
         $scope.busy = false
+        $scope.nomore = false
 
-        var parseUsers = function(tweet){
-            var tag = '<a href="'+TWITTER_URL+'/$1" target="_blank" class="tw-user">@$1</a>'
-            tweet = tweet.replace(/@([A-Za-z0-9_]+)/,tag)
-            return tweet
-        }
-
-        var parseUrls = function(tweet){
+        var parseUrls = function(post){
             var regex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gi
             var tag = '<a href="$1" target="_blank" class="tw-user">$1</a>'
-            tweet = tweet.replace(regex,tag)
-            return tweet
+            post = post.replace(regex,tag)
+            return post
         }
 
         $scope.parseDate = function(datestr){
@@ -33,29 +28,32 @@ angular.module('snBulkCurator')
         }
 
         var deleteSelected = function(){
-            $scope.tweets = $scope.tweets.filter(function(item){
+            $scope.posts = $scope.posts.filter(function(item){
                 return !item.delete
             })
         }
 
-        $scope.loadTweets = function(){
+        $scope.loadPosts = function(){
             if ($scope.busy) return;
             $scope.busy = true
-            $http.get('/api/tweets'+(max_id ? '?max_id='+max_id : '')).then(
+            $http.get('/api/facebook'+(max_id ? '?max_id='+max_id : '')).then(
                 function(res){
                     if(res.status == 200){
-                        $scope.tweets = $scope.tweets.concat(res.data)
-                        max_id = Math.min.apply(Math,$scope.tweets.map(function(item){return item.id;}))
+                        $scope.posts = $scope.posts.concat(res.data.data)
+                        if(res.data.data.length < 24){
+                            $scope.nomore = true;
+                        }
+                        max_id = Math.min.apply(Math,$scope.posts.map(function(item){return item.id;}))
                     }
                     $scope.busy = false
                 })
         }
-        $scope.loadTweets()
+        $scope.loadPosts()
 
-        $scope.deleteTweets = function(){
-            var dTweets = $scope.tweets.filter(function(item){return item.delete}).map(function(item){return item.id_str})
-            if(dTweets.length){
-                $http.delete('/api/tweets?tweets='+dTweets.join()).then(
+        $scope.deletePosts = function(){
+            var dposts = $scope.posts.filter(function(item){return item.delete}).map(function(item){return item.id})
+            if(dposts.length){
+                $http.delete('/api/facebook?posts='+dposts.join()).then(
                     function(res){
                         if(res.status == 200){
                             alert("Done deleting")
@@ -65,14 +63,13 @@ angular.module('snBulkCurator')
             }
         }
 
-        $scope.gotoTweet = function($event, username, twId){
-            $window.open(TWITTER_URL+'/'+username+'/status/'+twId);
+        $scope.gotoPost = function($event, username, twId){
+            $window.open(FACEBOOK_URL+'/'+username+'/status/'+twId);
         }
 
-        $scope.parseTweet = function(tweet){
-            tweet = parseUrls(tweet)
-            tweet = parseUsers(tweet)
-            return tweet
+        $scope.parsePost = function(post){
+            post = parseUrls(post)
+            return post
         }
 
         $scope.gtDate = function(a, b, comp) {

@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h1>Delete tweets</h1>
+            <h1>Delete posts</h1>
         </div>
     </div>
     <div class="row">
@@ -19,17 +19,19 @@
                 </div>
             </div>
             <div class="col-lg-2 col-lg-offset-4">
-                <button type="button" ng-click="deleteTweets()" ng-show="!busy" class="btn btn-danger">Delete Selected</button>
+                <button type="button" ng-click="deletePosts()" ng-show="!busy" class="btn btn-danger">Delete Selected</button>
             </div>
         </div>
-        <div class="col-lg-12" infinite-scroll='loadTweets()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
-            <div ng-repeat="tweet in tweets | filter:search | filter:{ created_at: dateFrom }:gtDate | filter:{ created_at: dateTo }:ltDate | groupCtxDate:'created_at'">
-                <h2 class="col-lg-12" ng-show="tweet.created_at_CHANGED">{{getYMDate(tweet.created_at)}}</h2>
-                <div  ng-class="(tweet.delete) ? 'elem-delete' : ''" class="col-lg-4 elem">
-                    <div ng-bind-html="parseTweet(tweet.text)" ng-click="gotoTweet($event, tweet.user.screen_name, tweet.id_str)" class="elem-td col-lg-10"></div>
-                <div class="del-div col-lg-1"><input type="checkbox" ng-model="tweet.delete"></div>
+        <div class="col-lg-12" infinite-scroll='loadPosts()' infinite-scroll-disabled='busy || nomore' infinite-scroll-distance='1'>
+            <div ng-repeat="post in posts | filter:search | filter:{ created_time: dateFrom }:gtDate | filter:{ created_time: dateTo }:ltDate | groupCtxDate:'created_time'">
+                <h2 class="col-lg-12" ng-show="post.created_time_CHANGED">{{getYMDate(post.created_time)}}</h2>
+                <div  ng-class="(post.delete) ? 'elem-delete' : ''" class="col-lg-4 elem">
+                    <div ng-click="gotoPost($event, post.user.screen_name, post.id_str)" class="elem-td col-lg-10">
+                        {{(post.description)?post.description:post.message}}
+                    </div>
+                <div class="del-div col-lg-1"><input type="checkbox" ng-model="post.delete"></div>
                 <div class="col-lg-12 elem-date">
-                    <span class="pull-right">{{parseDate(tweet.created_at) | date : 'dd MMM yyyy'}}</span>
+                    <span class="pull-right">{{parseDate(post.created_time) | date : 'dd MMM yyyy'}}</span>
                 </div>
                 </div>
             </div>

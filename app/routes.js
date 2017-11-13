@@ -38,8 +38,8 @@ module.exports = function(app, twapi) {
   app.delete('/api/facebook', function(req, res)
   {
     var facebookModel = new FacebookModel();
-    var items = req.query.items.split(',');
-    facebookModel.delete(items, function(data){
+    var posts = req.query.posts.split(',');
+    facebookModel.delete(posts, function(data){
       res.json(data);
     }); 
   });

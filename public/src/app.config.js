@@ -28,6 +28,13 @@
       controller: 'TwitterCtrl'
     })
 
+    $stateProvider
+    .state('facebook', {
+      url:'/facebook',
+      templateUrl: 'src/pages/facebook/facebook.html',
+      controller: 'FacebookCtrl'
+    })
+
   }]);
 
 
