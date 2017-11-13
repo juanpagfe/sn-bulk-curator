@@ -17,7 +17,7 @@ Twitter.prototype.get = function(max_id, callback){
         count: 100,
         include_rts: 1
     };
-
+    
     if (max_id) { props.max_id = max_id; }
 
     const twitterCallback = (err, data, response) => {
@@ -26,7 +26,6 @@ Twitter.prototype.get = function(max_id, callback){
         }
         callback(data);
     };
-    console.log(twapi);
 
     twapi.get('statuses/user_timeline', props, twitterCallback);
 }

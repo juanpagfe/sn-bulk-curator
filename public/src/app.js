@@ -11,6 +11,7 @@
     'ui.router',
     'ui.bootstrap',
     'oc.lazyLoad',
-    'ngSanitize'
+    'ngSanitize',
+    'infinite-scroll'
     ]);
   

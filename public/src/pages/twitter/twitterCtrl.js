@@ -1,7 +1,7 @@
-  'use strict';
-  
-  angular.module('snBulkCurator')
-  .controller(
+'use strict';
+
+angular.module('snBulkCurator')
+.controller(
     'TwitterCtrl', [
     '$scope',
     '$http', 
@@ -9,14 +9,11 @@
     function($scope, $http, $window)
     {
         const TWITTER_URL = 'https://twitter.com'
+        var max_id = false
 
-        $http.get('/api/tweets').then(
-            function(res){
-                if(res.status == 200){
-                    $scope.tweets = res.data
-                }
-            })
         $scope.dateFormat = 'YYYY.MM.dd'
+        $scope.tweets = []
+        $scope.busy = false
 
         var parseUsers = function(tweet){
             var tag = '<a href="'+TWITTER_URL+'/$1" target="_blank" class="tw-user">@$1</a>'
@@ -48,9 +45,23 @@
 
         var deleteSelected = function(){
             $scope.tweets = $scope.tweets.filter(function(item){
-                return !item.deleted
+                return !item.delete
             })
         }
+
+        $scope.loadTweets = function(){
+            if ($scope.busy) return;
+            $scope.busy = true
+            $http.get('/api/tweets'+(max_id ? '?max_id='+max_id : '')).then(
+            function(res){
+                if(res.status == 200){
+                    $scope.tweets = $scope.tweets.concat(res.data)
+                    max_id = Math.min.apply(Math,$scope.tweets.map(function(item){return item.id;}))
+                }
+                $scope.busy = false
+            })
+        }
+        $scope.loadTweets()
 
         $scope.deleteTweets = function(){
             var dTweets = getDeleteTweets()
@@ -78,16 +89,23 @@
             b = new Date(b)
             a.setHours(0, 0, 0, 0)
             b.setHours(0, 0, 0, 0)
-            console.log(new Date(a),'>=',new Date(b))
             return a >= b
         };
+
+        $scope.getYear = function(datestr) {
+            return new Date(datestr).getYear()
+        };
+
+        $scope.getYMDate = function(datestr){
+            var date = new Date(datestr)
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+        }
 
         $scope.ltDate = function(a,b) {
             a = new Date(a)
             b = new Date(b)
             a.setHours(0, 0, 0, 0)
             b.setHours(0, 0, 0, 0)
-            console.log(new Date(a),'<=',new Date(b))
             return a <= b
         };
     }
