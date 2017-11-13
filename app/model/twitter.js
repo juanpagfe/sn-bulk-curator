@@ -3,17 +3,17 @@
 const TwitterAPI = require('twit')
 
 const twapi = new TwitterAPI({
-    consumer_key: process.env.CONSUMER_KEY,
-    consumer_secret: process.env.CONSUMER_SECRET,
-    access_token: process.env.ACCESS_TOKEN,
-    access_token_secret:  process.env.ACCESS_TOKEN_SECRET
+    consumer_key: process.env.TW_CONSUMER_KEY,
+    consumer_secret: process.env.TW_CONSUMER_SECRET,
+    access_token: process.env.TW_ACCESS_TOKEN,
+    access_token_secret:  process.env.TW_ACCESS_TOKEN_SECRET
 });
 
 const Twitter = function(){};
 
 Twitter.prototype.get = function(max_id, callback){
     var props = {
-        screen_name: process.env.TWITTER_USERNAME,
+        screen_name: process.env.TW_USERNAME,
         count: 100,
         include_rts: 1
     };
