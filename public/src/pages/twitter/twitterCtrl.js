@@ -32,17 +32,6 @@ angular.module('snBulkCurator')
             return new Date(datestr);
         }
 
-        var getDeleteTweets = function(){
-            var len = $scope.tweets.length
-            var arr = [];
-            for (var i = len - 1; i >= 0; i--) {
-                if($scope.tweets[i].delete){
-                    arr.push($scope.tweets[i].id_str)
-                }
-            }
-            return arr;
-        }
-
         var deleteSelected = function(){
             $scope.tweets = $scope.tweets.filter(function(item){
                 return !item.delete
@@ -53,25 +42,27 @@ angular.module('snBulkCurator')
             if ($scope.busy) return;
             $scope.busy = true
             $http.get('/api/tweets'+(max_id ? '?max_id='+max_id : '')).then(
-            function(res){
-                if(res.status == 200){
-                    $scope.tweets = $scope.tweets.concat(res.data)
-                    max_id = Math.min.apply(Math,$scope.tweets.map(function(item){return item.id;}))
-                }
-                $scope.busy = false
-            })
+                function(res){
+                    if(res.status == 200){
+                        $scope.tweets = $scope.tweets.concat(res.data)
+                        max_id = Math.min.apply(Math,$scope.tweets.map(function(item){return item.id;}))
+                    }
+                    $scope.busy = false
+                })
         }
         $scope.loadTweets()
 
         $scope.deleteTweets = function(){
-            var dTweets = getDeleteTweets()
-            $http.delete('/api/tweets?tweets='+dTweets.join()).then(
-                function(res){
-                    if(res.status == 200){
-                        alert("Done deleting")
-                        deleteSelected()
-                    }
-                })
+            var dTweets = $scope.tweets.filter(function(item){return item.delete})
+            if(dTweets.length){
+                $http.delete('/api/tweets?tweets='+dTweets.join()).then(
+                    function(res){
+                        if(res.status == 200){
+                            alert("Done deleting")
+                            deleteSelected()
+                        }
+                    })
+            }
         }
 
         $scope.gotoTweet = function($event, username, twId){
