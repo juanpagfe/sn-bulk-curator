@@ -38,12 +38,22 @@ angular.module('snBulkCurator')
             })
         }
 
+        var parseTweets = function(tweets){
+            return tweets.map(function(tweet){
+                tweet.text = parseUrls(tweet.text)
+                tweet.text = parseUsers(tweet.text)
+                tweet.format_date = $scope.getYMDate(tweet.created_at)
+                return tweet
+            })
+        }
+
         $scope.loadTweets = function(){
             if ($scope.busy) return;
             $scope.busy = true
             $http.get('/api/tweets'+(max_id ? '?max_id='+max_id : '')).then(
                 function(res){
                     if(res.status == 200){
+                        res.data = parseTweets(res.data)
                         $scope.tweets = $scope.tweets.concat(res.data)
                         max_id = Math.min.apply(Math,$scope.tweets.map(function(item){return item.id;}))
                     }
@@ -67,12 +77,6 @@ angular.module('snBulkCurator')
 
         $scope.gotoTweet = function($event, username, twId){
             $window.open(TWITTER_URL+'/'+username+'/status/'+twId);
-        }
-
-        $scope.parseTweet = function(tweet){
-            tweet = parseUrls(tweet)
-            tweet = parseUsers(tweet)
-            return tweet
         }
 
         $scope.gtDate = function(a, b, comp) {

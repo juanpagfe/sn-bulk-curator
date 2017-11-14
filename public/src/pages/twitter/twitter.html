@@ -24,9 +24,9 @@
         </div>
         <div class="col-lg-12" infinite-scroll='loadTweets()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
             <div ng-repeat="tweet in tweets | filter:search | filter:{ created_at: dateFrom }:gtDate | filter:{ created_at: dateTo }:ltDate | groupCtxDate:'created_at'">
-                <h2 class="col-lg-12" ng-show="tweet.created_at_CHANGED">{{getYMDate(tweet.created_at)}}</h2>
+                <h2 class="col-lg-12" ng-show="tweet.created_at_CHANGED">{{tweet.format_date}}</h2>
                 <div  ng-class="(tweet.delete) ? 'elem-delete' : ''" class="col-lg-4 elem">
-                    <div ng-bind-html="parseTweet(tweet.text)" ng-click="gotoTweet($event, tweet.user.screen_name, tweet.id_str)" class="elem-td col-lg-10"></div>
+                    <div ng-bind-html="tweet.text" ng-click="gotoTweet($event, tweet.user.screen_name, tweet.id_str)" class="elem-td col-lg-10"></div>
                 <div class="del-div col-lg-1"><input type="checkbox" ng-model="tweet.delete"></div>
                 <div class="col-lg-12 elem-date">
                     <span class="pull-right">{{parseDate(tweet.created_at) | date : 'dd MMM yyyy'}}</span>
